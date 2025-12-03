@@ -84,7 +84,7 @@
   <ul id="expenseList"></ul>
 
   <script>
-    const API_URL = "/api/expenses"; // Works on Vercel
+    const API_URL = "/api/expenses";
 
     const form = document.getElementById("expenseForm");
     const descriptionInput = document.getElementById("description");
@@ -92,7 +92,6 @@
     const expenseList = document.getElementById("expenseList");
     const errorBox = document.getElementById("error");
 
-    // Load all expenses on page load
     async function loadExpenses() {
       const res = await fetch(API_URL);
       const data = await res.json();
@@ -110,7 +109,6 @@
       });
     }
 
-    // Add expense (POST)
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       errorBox.textContent = "";
@@ -123,7 +121,7 @@
         return;
       }
 
-      const expense = {
+      const payload = {
         description,
         amount,
         category: "General",
@@ -133,7 +131,7 @@
       const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(expense)
+        body: JSON.stringify(payload)
       });
 
       const data = await res.json();
@@ -143,15 +141,12 @@
         return;
       }
 
-      // Clear form
       descriptionInput.value = "";
       amountInput.value = "";
 
-      // Refresh list
-      loadExpenses();
+      await loadExpenses();
     });
 
-    // Load data on first visit
     loadExpenses();
   </script>
 </body>
