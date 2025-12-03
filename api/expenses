@@ -1,3 +1,8 @@
+export const config = {
+  runtime: "nodejs"
+};
+
+
 let expenses = [];
 
 export default function handler(req, res) {
