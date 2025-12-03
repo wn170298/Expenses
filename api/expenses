@@ -11,10 +11,15 @@ export default function handler(req, res) {
   }
 
   if (req.method === "POST") {
+    // Vercel auto-parses JSON bodies in Node runtime
     const { amount, description, category, date } = req.body || {};
 
-    // Validate required fields
-    if (!amount || !description || !category || !date) {
+    if (
+      amount === undefined ||
+      !description ||
+      !category ||
+      !date
+    ) {
       return res.status(400).json({
         success: false,
         error: "Missing required fields: amount, description, category, date"
@@ -23,7 +28,7 @@ export default function handler(req, res) {
 
     const newExpense = {
       id: expenses.length + 1,
-      amount,
+      amount: Number(amount),
       description,
       category,
       date
@@ -37,7 +42,7 @@ export default function handler(req, res) {
     });
   }
 
-  // Unsupported methods
+  res.setHeader("Allow", "GET, POST");
   return res.status(405).json({
     success: false,
     error: "Method not allowed"
